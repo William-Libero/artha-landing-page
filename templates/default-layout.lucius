@@ -1,0 +1,28 @@
+.masthead,
+.navbar {
+    background-color: #8ed33a;
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    margin-bottom: 0px;
+}
+
+.navbar .navbar-brand img{
+  cursor: pointer;
+}
+
+.navbar-nav{
+    width: 100%;
+    padding: 0;
+}
+
+.navbar-nav .nav-item{
+    list-style: none;
+    margin-right: 1%;
+}
+
+.navbar-nav .nav-item a{
+    color: black;
+    padding: 0;
+    cursor: pointer;
+}
