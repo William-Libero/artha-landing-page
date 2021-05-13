@@ -1,0 +1,1 @@
+web: artha-landing-page
