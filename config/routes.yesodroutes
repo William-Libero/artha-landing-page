@@ -9,3 +9,18 @@
 / HomeR GET
 /sobre SobreR GET
 /servicos ServicosR GET
+
+/cliente ClienteR GET POST
+/clientes/perfil/#ClienteId PerfilR GET
+/clientes ListaCliR GET
+/clientes/apagar/#ClienteId ApagarCliR POST
+
+/medico MedicoR GET POST
+/medicos/perfil/#MedicoId PerfilMedR GET
+/medicos ListaMedR GET
+/medicos/apagar/#MedicoId ApagarMedR POST
+
+/admin AdminR GET POST
+/admins/perfil/#AdminId PerfilAdminR GET
+/admins ListaAdminR GET
+/admins/apagar/#AdminId ApagarAdminR POST

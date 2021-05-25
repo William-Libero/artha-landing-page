@@ -25,5 +25,13 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # mutable-static: false
 # skip-combining: false
 
+database:
+  user:       "_env:PGUSER:ipmjvaelgwsgmh"
+  password:   "_env:PGPASS:e7a0cb109fbbb79f7ae2e5c59a4b7539ae3435a98f4bcdffe537fa740125c9c4"
+  host:       "_env:PGHOST:ec2-18-214-140-149.compute-1.amazonaws.com"
+  port:       "_env:PGPORT:5432"
+  database:   "_env:PGDATABASE:dn8o0d29uvd0u"
+  poolsize:   "_env:PGPOOLSIZE:10"
+
 copyright: Insert copyright statement here
 #analytics: UA-YOURCODE

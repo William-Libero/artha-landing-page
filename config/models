@@ -1,0 +1,17 @@
+Cliente
+    nome Text
+    cpf Text
+    idade Int
+    deriving Show
+
+Medico
+    nome Text
+    cpf Text
+    idade Int
+    deriving Show
+
+Admin
+    nome Text
+    cpf Text
+    idade Int
+    deriving Show

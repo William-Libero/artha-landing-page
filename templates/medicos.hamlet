@@ -1,0 +1,56 @@
+<div .container>
+    <div .navbar .navbar-expand-lg .navbar-light .bg-light>
+        <a .navbar-brand href="/">
+            <img src=@{StaticR img_logoartha_ico} width="30" height="30">
+        <ul .navbar-nav .mr-auto>
+            <li .nav-item .active>
+                <a .nav-link href="/">
+                    Home
+            <li .nav-item .active>
+                <a .nav-link href="/sobre">
+                    Sobre
+            <li .nav-item .active>
+                <a .nav-link href="/servicos">
+                    Serviços
+            <li .nav-item .active>
+                <a .nav-link href="/cliente">
+                    Incluir Cliente
+            <li .nav-item .active>
+                <a .nav-link href="/clientes">
+                    Clientes
+            <li .nav-item .active>
+                <a .nav-link href="/medico">
+                    Incluir medico
+            <li .nav-item .active>
+                <a .nav-link href="/medicos">
+                    Medicos
+            <li .nav-item .active>
+                <a .nav-link href="/admin">
+                    Incluir admin
+            <li .nav-item .active>
+                <a .nav-link href="/admins">
+                    Admins
+    
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Nome
+                <th>
+                    CPF
+                <th>
+                    IDADE
+                <th>
+
+        <tbody>
+            $forall Entity mid medico <- medicos
+                <tr>
+                    <td>
+                        #{medicoNome medico}
+                    <td>
+                        #{medicoCpf medico}
+                    <td>
+                        #{medicoIdade medico}
+                    <td>
+                        <form method=post action=@{ApagarMedR mid}>
+                            <input type="submit" value="X">

@@ -4,16 +4,12 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
-module Handler.Home where
+module Handler.Servicos where
 
 import Import
---import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
---import Text.Julius (RawJS (..))
 
--- Monad handler => Back-end
--- Monad widget => Front-end
-getHomeR :: Handler Html
-getHomeR = do
+getServicosR :: Handler Html
+getServicosR = do
     defaultLayout $ do
         toWidgetHead [julius|
             function teste(){
@@ -58,11 +54,11 @@ getHomeR = do
                         <li .nav-item .active>
                             <a .nav-link href="/admins">
                                 Admins
+            
+            <div .container>
+                <h1>
+                    Servicos
 
-                <div .container>
-                    <h1>
-                        Landing-page Artha
-
-                    <button onclick="teste();">
-                        OK
+                <button onclick="teste();">
+                    OK
         |]
