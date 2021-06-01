@@ -11,7 +11,7 @@ Medico
     deriving Show
 
 Admin
-    nome Text
-    cpf Text
-    idade Int
+    email Text
+    senha Text
+    UniqueEmail email
     deriving Show

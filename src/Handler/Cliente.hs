@@ -7,55 +7,23 @@
 module Handler.Cliente where
 
 import Import
+import Handler.Auxiliar
 
-formCliente :: Form Cliente
-formCliente = renderDivs $ Cliente
-    <$> areq textField "Nome: " Nothing
-    <*> areq textField "Cpf: " Nothing
-    <*> areq intField  "Idade: " Nothing
+formCliente :: Maybe Cliente -> Form Cliente
+formCliente ms = renderDivs $ Cliente
+    <$> areq textField "Nome: " (fmap clienteNome ms)
+    <*> areq textField "Cpf: "  (fmap clienteCpf ms)
+    <*> areq intField  "Idade: " (fmap clienteIdade ms)
 
 getClienteR :: Handler Html
 getClienteR = do
-    (widget,_) <- generateFormPost formCliente
+    (widget,_) <- generateFormPost (formCliente Nothing)
     msg <- getMessage
-    defaultLayout $ 
-        [whamlet|
-            <div .container>
-                <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
-                        <img src=@{StaticR img_logoartha_ico} width="30" height="30">
-                    <ul .navbar-nav .mr-auto>
-                        <li .nav-item .active>
-                            <a .nav-link href="/">
-                                Home
-                        <li .nav-item .active>
-                            <a .nav-link href="/sobre">
-                                Sobre
-                        <li .nav-item .active>
-                            <a .nav-link href="/servicos">
-                                Serviços
-                        <li .nav-item .active>
-                            <a .nav-link href="/cliente">
-                                Incluir Cliente
-                        <li .nav-item .active>
-                            <a .nav-link href="/clientes">
-                                Clientes
-
-                $maybe mensa <- msg 
-                    <div>
-                        ^{mensa}
-                
-                <h1>
-                    CADASTRO DE CLIENTE
-                
-                <form method=post action=@{ClienteR}>
-                    ^{widget}
-                    <input type="submit" value="Cadastrar">
-        |]
+    defaultLayout (formWidget widget msg ClienteR "Cadastrar")
 
 postClienteR :: Handler Html
 postClienteR = do
-    ((result,_),_) <- runFormPost formCliente
+    ((result,_),_) <- runFormPost (formCliente Nothing)
     case result of 
         FormSuccess cliente -> do 
             runDB $ insert cliente 
@@ -126,3 +94,20 @@ postApagarCliR :: ClienteId -> Handler Html
 postApagarCliR cid = do
     runDB $ delete cid 
     redirect ListaCliR
+
+getEditarCliR :: ClienteId -> Handler Html
+getEditarCliR cid = do
+    cliente <- runDB $ get404 cid
+    (widget,_) <- generateFormPost (formCliente (Just cliente))
+    msg <- getMessage
+    defaultLayout (formWidget widget msg (EditarCliR cid) "Editar")
+
+postEditarCliR :: ClienteId -> Handler Html
+postEditarCliR cid = do
+    clienteAntigo <- runDB $ get404 cid
+    ((result,_),_) <- runFormPost (formCliente Nothing)
+    case result of
+        FormSuccess novoCliente -> do
+            runDB $ replace cid novoCliente
+            redirect ListaCliR 
+        _ -> redirect HomeR

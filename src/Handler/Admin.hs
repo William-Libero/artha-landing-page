@@ -10,9 +10,8 @@ import Import
 
 formAdmin :: Form Admin
 formAdmin = renderDivs $ Admin
-    <$> areq textField "Nome: " Nothing
-    <*> areq textField "Cpf: " Nothing
-    <*> areq intField  "Idade: " Nothing
+    <$> areq textField "E-Mail: " Nothing
+    <*> areq textField "Senha: " Nothing
 
 getAdminR :: Handler Html
 getAdminR = do
@@ -105,19 +104,13 @@ getPerfilAdminR aid = do
                             <a .nav-link href="/admins">
                                 Admins
            <h1>
-                PAGINA DE #{adminNome admin}
-                
-           <h2>
-                CPF: #{adminCpf admin}
-                
-           <h2>
-                Idade: #{adminIdade admin}
+                PAGINA DE #{adminEmail admin}
      |]
 
 -- select * from admin order by nome;
 getListaAdminR :: Handler Html
 getListaAdminR = do
-    admins <- runDB $ selectList [] [Asc AdminNome]
+    admins <- runDB $ selectList [] [Asc AdminId]
     defaultLayout $ do 
         $(whamletFile "templates/admin.hamlet")
 

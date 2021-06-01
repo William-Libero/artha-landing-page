@@ -45,6 +45,14 @@ type Form a = Html -> MForm Handler (FormResult a, Widget)
 instance Yesod App where
     makeLogger = return . appLogger
 
+    authRoute _ = Just LoginAdminR
+
+    isAuthorized LoginAdminR _ = return Authorized
+    isAuthorized (StaticR _) _ = return Authorized
+    isAuthorized AdminR _ = return Authorized
+
+    isAuthorized _ _ = isUsuario
+
     defaultLayout :: Widget -> Handler Html
     defaultLayout widget = do
         master <- getYesod
@@ -81,16 +89,6 @@ instance Yesod App where
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
-    isAuthorized
-        :: Route App  -- ^ The route the user is visiting.
-        -> Bool       -- ^ Whether or not this is a "write" request.
-        -> Handler AuthResult
-    -- Routes not requiring authenitcation.
-    isAuthorized FaviconR _ = return Authorized
-    isAuthorized RobotsR _ = return Authorized
-    -- Default to Authorized for now.
-    isAuthorized _ _ = return Authorized
-
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
     -- expiration dates to be set far in the future without worry of
@@ -125,6 +123,13 @@ instance YesodBreadcrumbs App where
         -> Handler (Text, Maybe (Route App))
     breadcrumb HomeR = return ("Home", Nothing)
     breadcrumb  _ = return ("home", Nothing)
+
+isUsuario :: Handler AuthResult
+isUsuario = do
+    sess <- lookupSession "_ID"
+    case sess of
+        Nothing -> return AuthenticationRequired
+        Just _ -> return Authorized
 
 instance YesodPersist App where
     type YesodPersistBackend App = SqlBackend

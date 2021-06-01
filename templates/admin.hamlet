@@ -35,22 +35,14 @@
         <thead>
             <tr>
                 <th>
-                    Nome
-                <th>
-                    CPF
-                <th>
-                    IDADE
+                    Email
                 <th>
 
         <tbody>
             $forall Entity aid admin <- admins
                 <tr>
                     <td>
-                        #{adminNome admin}
-                    <td>
-                        #{adminCpf admin}
-                    <td>
-                        #{adminIdade admin}
+                        #{adminEmail admin}
                     <td>
                         <form method=post action=@{ApagarAdminR aid}>
                             <input type="submit" value="X">

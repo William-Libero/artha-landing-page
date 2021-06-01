@@ -58,6 +58,9 @@ getHomeR = do
                         <li .nav-item .active>
                             <a .nav-link href="/admins">
                                 Admins
+                        <li .nav-item .active>
+                            <form method=post action=@{SairR}>
+                                <input type="submit" value="Sair">
 
                 <div .container>
                     <h1>

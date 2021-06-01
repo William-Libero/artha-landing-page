@@ -6,7 +6,9 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/ HomeR GET
+/ LoginAdminR GET POST
+/logout SairR POST 
+/home HomeR GET
 /sobre SobreR GET
 /servicos ServicosR GET
 
@@ -24,3 +26,5 @@
 /admins/perfil/#AdminId PerfilAdminR GET
 /admins ListaAdminR GET
 /admins/apagar/#AdminId ApagarAdminR POST
+
+/cliente/editar/#ClienteId EditarCliR GET POST
