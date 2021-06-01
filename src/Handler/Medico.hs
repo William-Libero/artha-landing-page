@@ -22,11 +22,11 @@ getMedicoR = do
         [whamlet|
             <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
+                    <a .navbar-brand href="/home">
                         <img src=@{StaticR img_logoartha_ico} width="30" height="30">
                     <ul .navbar-nav .mr-auto>
                         <li .nav-item .active>
-                            <a .nav-link href="/">
+                            <a .nav-link href="/home">
                                 Home
                         <li .nav-item .active>
                             <a .nav-link href="/sobre">
@@ -35,18 +35,33 @@ getMedicoR = do
                             <a .nav-link href="/servicos">
                                 Serviços
                         <li .nav-item .active>
+                            <a .nav-link href="/cliente">
+                                Incluir Cliente
+                        <li .nav-item .active>
+                            <a .nav-link href="/clientes">
+                                Clientes
+                        <li .nav-item .active>
                             <a .nav-link href="/medico">
                                 Incluir medico
                         <li .nav-item .active>
                             <a .nav-link href="/medicos">
-                                medicos
+                                Medicos
+                        <li .nav-item .active>
+                            <a .nav-link href="/admin">
+                                Incluir admin
+                        <li .nav-item .active>
+                            <a .nav-link href="/admins">
+                                Admins
+                        <li .nav-item .active>
+                            <form method=post action=@{SairR}>
+                                <input type="submit" value="Sair">
 
                 $maybe mensa <- msg 
                     <div>
                         ^{mensa}
                 
                 <h1>
-                    CADASTRO DE medico
+                    Cadastro de médico
                 
                 <form method=post action=@{MedicoR}>
                     ^{widget}
@@ -73,39 +88,42 @@ getPerfilMedR cid = do
      medico <- runDB $ get404 cid
      defaultLayout [whamlet|
         <div .container>
-                <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
-                        <img src=@{StaticR img_logoartha_ico} width="30" height="30">
-                    <ul .navbar-nav .mr-auto>
-                        <li .nav-item .active>
-                            <a .nav-link href="/">
-                                Home
-                        <li .nav-item .active>
-                            <a .nav-link href="/sobre">
-                                Sobre
-                        <li .nav-item .active>
-                            <a .nav-link href="/servicos">
-                                Serviços
-                        <li .nav-item .active>
-                            <a .nav-link href="/cliente">
-                                Incluir Cliente
-                        <li .nav-item .active>
-                            <a .nav-link href="/clientes">
-                                Clientes
-                        <li .nav-item .active>
-                            <a .nav-link href="/medico">
-                                Incluir medico
-                        <li .nav-item .active>
-                            <a .nav-link href="/medicos">
-                                Medicos
-                        <li .nav-item .active>
-                            <a .nav-link href="/admin">
-                                Incluir admin
-                        <li .nav-item .active>
-                            <a .nav-link href="/admins">
-                                Admins
+            <div .navbar .navbar-expand-lg .navbar-light .bg-light>
+                <a .navbar-brand href="/home">
+                    <img src=@{StaticR img_logoartha_ico} width="30" height="30">
+                <ul .navbar-nav .mr-auto>
+                    <li .nav-item .active>
+                        <a .nav-link href="/home">
+                            Home
+                    <li .nav-item .active>
+                        <a .nav-link href="/sobre">
+                            Sobre
+                    <li .nav-item .active>
+                        <a .nav-link href="/servicos">
+                            Serviços
+                    <li .nav-item .active>
+                        <a .nav-link href="/cliente">
+                            Incluir Cliente
+                    <li .nav-item .active>
+                        <a .nav-link href="/clientes">
+                            Clientes
+                    <li .nav-item .active>
+                        <a .nav-link href="/medico">
+                            Incluir medico
+                    <li .nav-item .active>
+                        <a .nav-link href="/medicos">
+                            Medicos
+                    <li .nav-item .active>
+                        <a .nav-link href="/admin">
+                            Incluir admin
+                    <li .nav-item .active>
+                        <a .nav-link href="/admins">
+                            Admins
+                    <li .nav-item .active>
+                        <form method=post action=@{SairR}>
+                            <input type="submit" value="Sair">
            <h1>
-                PAGINA DE #{medicoNome medico}
+                Página do médico: #{medicoNome medico}
                 
            <h2>
                 CPF: #{medicoCpf medico}

@@ -50,6 +50,7 @@ instance Yesod App where
     isAuthorized LoginAdminR _ = return Authorized
     isAuthorized (StaticR _) _ = return Authorized
     isAuthorized AdminR _ = return Authorized
+    isAuthorized ListaAdminR _ = return Authorized
 
     isAuthorized _ _ = isUsuario
 

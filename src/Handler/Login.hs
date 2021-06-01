@@ -16,10 +16,13 @@ formLoginAdminR = renderDivs $ Admin
 
 getLoginAdminR :: Handler Html
 getLoginAdminR  = do
-    defaultLayout [whamlet|
-        <div .container>
+    (widget,_) <- generateFormPost formLoginAdminR
+    msg <- getMessage
+    defaultLayout $ 
+        [whamlet|
+            <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
+                    <a .navbar-brand href="/home">
                         <img src=@{StaticR img_logoartha_ico} width="30" height="30">
                     <ul .navbar-nav .mr-auto>
                         <li .nav-item .active>
@@ -28,10 +31,21 @@ getLoginAdminR  = do
                         <li .nav-item .active>
                             <a .nav-link href="/admins">
                                 Admins
-    |]
-    (widget,_) <- generateFormPost formLoginAdminR
-    msg <- getMessage
-    defaultLayout (formWidget widget msg LoginAdminR "Logar")
+                        <li .nav-item .active>
+                            <form method=post action=@{SairR}>
+                                <input type="submit" value="Sair">
+
+                $maybe mensa <- msg 
+                    <div>
+                        ^{mensa}
+
+                <h1>
+                    Login
+
+                <form method=post action=@{LoginAdminR}>
+                    ^{widget}
+                    <input type="submit" value="Logar">
+        |]
 
 postLoginAdminR :: Handler Html
 postLoginAdminR = do

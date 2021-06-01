@@ -24,11 +24,11 @@ getSobreR = do
         [whamlet|
             <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
+                    <a .navbar-brand href="/home">
                         <img src=@{StaticR img_logoartha_ico} width="30" height="30">
                     <ul .navbar-nav .mr-auto>
                         <li .nav-item .active>
-                            <a .nav-link href="/">
+                            <a .nav-link href="/home">
                                 Home
                         <li .nav-item .active>
                             <a .nav-link href="/sobre">
@@ -54,6 +54,9 @@ getSobreR = do
                         <li .nav-item .active>
                             <a .nav-link href="/admins">
                                 Admins
+                        <li .nav-item .active>
+                            <form method=post action=@{SairR}>
+                                <input type="submit" value="Sair">
             
             <div .container>
                 <h1>
