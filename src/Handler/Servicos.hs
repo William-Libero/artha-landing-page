@@ -12,13 +12,10 @@ getServicosR :: Handler Html
 getServicosR = do
     defaultLayout $ do
         toWidgetHead [julius|
-            function teste(){
-                alert("oi");
-            }
         |]
         toWidgetHead [lucius|
-            h1{
-                color: red;
+            ul {
+                list-style: none;
             }
         |]
         [whamlet|
@@ -55,13 +52,23 @@ getServicosR = do
                             <a .nav-link href="/admins">
                                 Admins
                         <li .nav-item .active>
+                            <a .nav-link href="/produtos">
+                                Produtos
+                        <li .nav-item .active>
                             <form method=post action=@{SairR}>
                                 <input type="submit" value="Sair">
             
-            <div .container>
-                <h1>
-                    Servicos
-
-                <button onclick="teste();">
-                    OK
+        <div .container .text-center>
+                    <h1>
+                        Serviços oferecidos:
+                    <ul>
+                        <li>
+                            <h3>
+                                Sistema para médicos.
+                        <li>
+                            <h3>
+                                Sistema para pessoas com problemas psicosociais.
+                        <li>
+                            <h3>
+                                Funcionalidades que ajudam pessoas com problemas psicosociais em casos de necessidade.    
         |]

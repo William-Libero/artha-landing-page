@@ -18,7 +18,20 @@ getMedicoR :: Handler Html
 getMedicoR = do
     (widget,_) <- generateFormPost formMedico
     msg <- getMessage
-    defaultLayout $ 
+    defaultLayout $ do
+        toWidgetHead [lucius|
+            #hident2{
+                margin-left: 0.5%;
+            }
+
+            #hident3{
+                margin-left: 2%;
+            }
+
+            #hident4{
+                margin-left: 0.8%;
+            }
+        |]
         [whamlet|
             <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
@@ -53,19 +66,23 @@ getMedicoR = do
                             <a .nav-link href="/admins">
                                 Admins
                         <li .nav-item .active>
+                            <a .nav-link href="/produtos">
+                                Produtos
+                        <li .nav-item .active>
                             <form method=post action=@{SairR}>
                                 <input type="submit" value="Sair">
 
                 $maybe mensa <- msg 
                     <div>
                         ^{mensa}
-                
-                <h1>
-                    Cadastro de médico
-                
-                <form method=post action=@{MedicoR}>
-                    ^{widget}
-                    <input type="submit" value="Cadastrar">
+            <div .container>
+                <div .row .justify-content-center .text-center>        
+                    <h1>
+                        Cadastro de médico
+                <div .row .justify-content-center .text-center>
+                    <form method=post action=@{MedicoR}>
+                        ^{widget}
+                        <input type="submit" value="Cadastrar">
         |]
 
 postMedicoR :: Handler Html
@@ -119,6 +136,9 @@ getPerfilMedR cid = do
                     <li .nav-item .active>
                         <a .nav-link href="/admins">
                             Admins
+                    <li .nav-item .active>
+                        <a .nav-link href="/produtos">
+                            Produtos
                     <li .nav-item .active>
                         <form method=post action=@{SairR}>
                             <input type="submit" value="Sair">

@@ -31,19 +31,22 @@
                 <a .nav-link href="/admins">
                     Admins
             <li .nav-item .active>
+                <a .nav-link href="/produtos">
+                    Produtos
+            <li .nav-item .active>
                 <form method=post action=@{SairR}>
                     <input type="submit" value="Sair">
     
-    <table>
+    <table .table>
         <thead>
-            <tr>
+            <tr scope="col">
                 <th>
                     Email
                 <th>
 
         <tbody>
             $forall Entity aid admin <- admins
-                <tr>
+                <tr scope="col">
                     <td>
                         #{adminEmail admin}
                     <td>

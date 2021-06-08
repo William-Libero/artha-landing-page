@@ -17,7 +17,16 @@ getAdminR :: Handler Html
 getAdminR = do
     (widget,_) <- generateFormPost formAdmin
     msg <- getMessage
-    defaultLayout $ 
+    defaultLayout $ do
+        toWidgetHead [lucius|
+            #hident2{
+                margin-left: 0.5%;
+            }
+
+            #hident3{
+                margin-left: 0.7%;
+            }
+        |]
         [whamlet|
             <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
@@ -52,19 +61,24 @@ getAdminR = do
                             <a .nav-link href="/admins">
                                 Admins
                         <li .nav-item .active>
+                            <a .nav-link href="/produtos">
+                                Produtos
+                        <li .nav-item .active>
                             <form method=post action=@{SairR}>
                                 <input type="submit" value="Sair">
 
                 $maybe mensa <- msg 
                     <div>
                         ^{mensa}
-                
-                <h1>
-                    CADASTRO DE ADMIN
-                
-                <form method=post action=@{AdminR}>
-                    ^{widget}
-                    <input type="submit" value="Cadastrar">
+
+            <div .container>
+                <div .row .justify-content-center .text-center>
+                    <h1>
+                        CADASTRO DE ADMIN
+                <div .row .justify-content-center .text-center>
+                    <form method=post action=@{AdminR}>
+                        ^{widget}
+                        <input type="submit" value="Cadastrar">
         |]
 
 postAdminR :: Handler Html
@@ -118,6 +132,9 @@ getPerfilAdminR aid = do
                     <li .nav-item .active>
                         <a .nav-link href="/admins">
                             Admins
+                    <li .nav-item .active>
+                        <a .nav-link href="/produtos">
+                            Produtos
                     <li .nav-item .active>
                         <form method=post action=@{SairR}>
                             <input type="submit" value="Sair">

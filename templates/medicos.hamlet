@@ -31,12 +31,15 @@
                 <a .nav-link href="/admins">
                     Admins
             <li .nav-item .active>
+                <a .nav-link href="/produtos">
+                    Produtos
+            <li .nav-item .active>
                 <form method=post action=@{SairR}>
                     <input type="submit" value="Sair">
     
-    <table>
+    <table .table>
         <thead>
-            <tr>
+            <tr scope="col">
                 <th>
                     Nome
                 <th>
@@ -47,7 +50,7 @@
 
         <tbody>
             $forall Entity mid medico <- medicos
-                <tr>
+                <tr scope="col">
                     <td>
                         #{medicoNome medico}
                     <td>

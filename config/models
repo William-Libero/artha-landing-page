@@ -15,3 +15,13 @@ Admin
     senha Text
     UniqueEmail email
     deriving Show
+
+Produto
+    nome Text
+    preco Double
+
+Venda
+    cliid ClienteId
+    prodid ProdutoId
+    dia Day
+    qt Int

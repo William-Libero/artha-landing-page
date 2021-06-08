@@ -4,29 +4,33 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
-module Handler.Cliente where
+module Handler.Venda where
 
 import Import
+import Database.Persist.Postgresql
 import Handler.Auxiliar
 
-formCliente :: Maybe Cliente -> Form Cliente
-formCliente ms = renderDivs $ Cliente
-    <$> areq textField "Nome: " (fmap clienteNome ms)
-    <*> areq textField "Cpf: "  (fmap clienteCpf ms)
-    <*> areq intField  "Idade: " (fmap clienteIdade ms)
+formVenda :: ClienteId -> Form Venda
+formVenda cid = renderDivs $ Venda
+    <$> pure cid
+    <*> areq (selectField prodCB) "Produto: " Nothing 
+    <*> lift (liftIO (map utctDay getCurrentTime))
+    <*> areq intField  "Quantidade: " Nothing
 
-getClienteR :: Handler Html
-getClienteR = do
-    (widget,_) <- generateFormPost (formCliente Nothing)
+prodCB :: Handler (OptionList (Key Produto))
+prodCB = do
+    produtos <- runDB $ selectList [] [Asc ProdutoNome]
+    optionsPairs $
+        map (\r -> (produtoNome $ entityVal r, entityKey r)) produtos
+
+getCompraR :: ClienteId -> Handler Html
+getCompraR cid = do
+    (widget,_) <- generateFormPost (formVenda cid)
     msg <- getMessage
     defaultLayout $ do
         toWidgetHead [lucius|
             #hident2{
                 margin-left: 0.5%;
-            }
-
-            #hident3{
-                margin-left: 2%;
             }
 
             #hident4{
@@ -80,39 +84,51 @@ getClienteR = do
              <div .container>
                     <div .row .justify-content-center .text-center>
                         <h1>
-                            Cadastro de cliente
+                            Cadastro de compra
                     <div .row .justify-content-center .text-center>
-                        <form method=post action=@{ClienteR}>
+                        <form method=post action=@{CompraR cid}>
                             ^{widget}
-                            <input type="submit" value="Cadastrar">
+                            <input type="submit" value="Comprar">
         |]
 
-postClienteR :: Handler Html
-postClienteR = do
-    ((result,_),_) <- runFormPost (formCliente Nothing)
+postCompraR :: ClienteId -> Handler Html
+postCompraR cid = do
+    ((result,_),_) <- runFormPost (formVenda cid)
     case result of 
-        FormSuccess cliente -> do 
-            runDB $ insert cliente 
+        FormSuccess venda -> do 
+            runDB $ insert venda 
             setMessage [shamlet|
                 <div>
-                    CLIENTE INCLUIDO COM SUCESSO!
+                    COMPRA INCLUIDO COM SUCESSO!
             |]
-            redirect ClienteR
+            redirect (CarrinhoR cid)
         _ -> redirect HomeR
 
--- Select * from cliente where id = cid
--- http://localhost:8080/cliente/perfil/1
-getPerfilR :: ClienteId -> Handler Html
-getPerfilR cid = do
-     cliente <- runDB $ get404 cid
-     defaultLayout [whamlet|
-        <div .container>
+mult :: Double -> Double -> Double
+mult = (*)
+
+getCarrinhoR :: ClienteId -> Handler Html
+getCarrinhoR cid = do 
+    let sql = "SELECT ??,??,?? FROM produto \
+          \ INNER JOIN venda ON venda.prodid = produto.id \
+          \ INNER JOIN cliente ON venda.cliid = cliente.id \
+          \ WHERE cliente.id = ?"
+    cliente <- runDB $ get404 cid
+    tudo <- runDB $ rawSql sql [toPersistValue cid] :: Handler [(Entity Produto,Entity Venda,Entity Cliente)]
+    defaultLayout $ do 
+        toWidgetHead [lucius|
+            ul{
+                list-style: none;
+            }
+        |]
+        [whamlet|
+            <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
-                    <a .navbar-brand href="/">
+                    <a .navbar-brand href="/home">
                         <img src=@{StaticR img_logoartha_ico} width="30" height="30">
                     <ul .navbar-nav .mr-auto>
                         <li .nav-item .active>
-                            <a .nav-link href="/">
+                            <a .nav-link href="/home">
                                 Home
                         <li .nav-item .active>
                             <a .nav-link href="/sobre">
@@ -141,42 +157,16 @@ getPerfilR cid = do
                         <li .nav-item .active>
                             <a .nav-link href="/produtos">
                                 Produtos
-                                
-           <h1>
-                PAGINA DE #{clienteNome cliente}
-                
-           <h2>
-                CPF: #{clienteCpf cliente}
-                
-           <h2>
-                Idade: #{clienteIdade cliente}
-     |]
-
--- select * from cliente order by nome;
-getListaCliR :: Handler Html
-getListaCliR = do
-    clientes <- runDB $ selectList [] [Asc ClienteNome]
-    defaultLayout $ do 
-        $(whamletFile "templates/clientes.hamlet")
-
-postApagarCliR :: ClienteId -> Handler Html
-postApagarCliR cid = do
-    runDB $ delete cid 
-    redirect ListaCliR
-
-getEditarCliR :: ClienteId -> Handler Html
-getEditarCliR cid = do
-    cliente <- runDB $ get404 cid
-    (widget,_) <- generateFormPost (formCliente (Just cliente))
-    msg <- getMessage
-    defaultLayout (formWidget widget msg (EditarCliR cid) "Editar")
-
-postEditarCliR :: ClienteId -> Handler Html
-postEditarCliR cid = do
-    clienteAntigo <- runDB $ get404 cid
-    ((result,_),_) <- runFormPost (formCliente Nothing)
-    case result of
-        FormSuccess novoCliente -> do
-            runDB $ replace cid novoCliente
-            redirect ListaCliR 
-        _ -> redirect HomeR
+                        <li .nav-item .active>
+                            <form method=post action=@{SairR}>
+                                <input type="submit" value="Sair">
+            <div .container>
+                <div .row .justify-content-center .text-center> 
+                    <h1>
+                        CARRINHO DE #{clienteNome cliente}
+                <div .row .justify-content-center .text-center> 
+                    <ul>
+                        $forall (Entity _ produto, Entity _ venda, Entity _ _) <- tudo
+                            <li>
+                                #{produtoNome produto}, #{mult (produtoPreco produto) (fromIntegral (vendaQt venda))} no dia #{show $ vendaDia venda}
+        |]

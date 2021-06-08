@@ -16,14 +16,8 @@ getHomeR :: Handler Html
 getHomeR = do
     defaultLayout $ do
         toWidgetHead [julius|
-            function teste(){
-                alert("oi");
-            }
         |]
         toWidgetHead [lucius|
-            h1{
-                color: red;
-            }
         |]
         [whamlet|
             <div .container>
@@ -59,13 +53,13 @@ getHomeR = do
                             <a .nav-link href="/admins">
                                 Admins
                         <li .nav-item .active>
+                            <a .nav-link href="/produtos">
+                                Produtos
+                        <li .nav-item .active>
                             <form method=post action=@{SairR}>
                                 <input type="submit" value="Sair">
 
-                <div .container>
+            <div .container .text-center>
                     <h1>
-                        Landing-page Artha
-
-                    <button onclick="teste();">
-                        OK
+                        Bem vindo a Landing-page de Admin da Artha
         |]

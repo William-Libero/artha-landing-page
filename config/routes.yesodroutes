@@ -28,3 +28,9 @@
 /admins/apagar/#AdminId ApagarAdminR POST
 
 /cliente/editar/#ClienteId EditarCliR GET POST
+
+/produtos ProdutoR GET POST
+
+/compra/#ClienteId/ CompraR GET POST
+
+/carrinho/#ClienteId CarrinhoR GET

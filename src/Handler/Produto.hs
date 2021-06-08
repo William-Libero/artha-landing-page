@@ -4,16 +4,33 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
-module Handler.Sobre where
+module Handler.Produto where
 
 import Import
+import Handler.Auxiliar
 
-getSobreR :: Handler Html
-getSobreR = do
+formProduto :: Maybe Produto -> Form Produto
+formProduto ms = renderDivs $ Produto
+    <$> areq textField "Nome: " Nothing
+    <*> areq doubleField "Preço: "  Nothing
+
+getProdutoR :: Handler Html
+getProdutoR = do
+    (widget,_) <- generateFormPost (formProduto Nothing)
+    msg <- getMessage
     defaultLayout $ do
-        toWidgetHead [julius|
-        |]
         toWidgetHead [lucius|
+            #hident2{
+                margin-left: 0.5%;
+            }
+
+            #hident3{
+                margin-left: 0.5%;
+            }
+
+            #hident4{
+                margin-left: 0.8%;
+            }
         |]
         [whamlet|
             <div .container>
@@ -54,18 +71,30 @@ getSobreR = do
                         <li .nav-item .active>
                             <form method=post action=@{SairR}>
                                 <input type="submit" value="Sair">
-            
-            <div .container>
+
+                $maybe mensa <- msg 
+                    <div>
+                        ^{mensa}
+
+             <div .container>
                     <div .row .justify-content-center .text-center>
                         <h1>
-                            Sobre
+                            Cadastro de produto
                     <div .row .justify-content-center .text-center>
-                        <h3>
-                            Traz segurança para o usuário e familiares
-                        <h3>
-                            Auxilia profissionais da saúde no momento de atendimento
-                        <h3>
-                            Facilita reintregação a sociedade, o que influencia na melhora clínica do paciente
-                        <h3>
-                            Atende aos principios da reforma psiquiatrica
+                        <form method=post action=@{ProdutoR}>
+                            ^{widget}
+                            <input type="submit" value="Cadastrar">
         |]
+
+postProdutoR :: Handler Html
+postProdutoR = do
+    ((result,_),_) <- runFormPost (formProduto Nothing)
+    case result of 
+        FormSuccess produto -> do 
+            runDB $ insert produto 
+            setMessage [shamlet|
+                <div>
+                    PRODUTO INCLUIDO COM SUCESSO!
+            |]
+            redirect ProdutoR
+        _ -> redirect HomeR

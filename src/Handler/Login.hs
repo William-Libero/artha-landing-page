@@ -18,7 +18,21 @@ getLoginAdminR :: Handler Html
 getLoginAdminR  = do
     (widget,_) <- generateFormPost formLoginAdminR
     msg <- getMessage
-    defaultLayout $ 
+    defaultLayout $ do
+        toWidgetHead [lucius|
+            .container-form{
+                display: flex;
+                justify-content: center;
+            }
+
+            #hident2{
+                margin-left: 0.5%;
+            }
+
+            #hident3{
+                margin-left: 0.8%;
+            }
+        |]
         [whamlet|
             <div .container>
                 <div .navbar .navbar-expand-lg .navbar-light .bg-light>
@@ -39,12 +53,14 @@ getLoginAdminR  = do
                     <div>
                         ^{mensa}
 
-                <h1>
-                    Login
-
-                <form method=post action=@{LoginAdminR}>
-                    ^{widget}
-                    <input type="submit" value="Logar">
+            <div .container>
+                    <div .row .justify-content-center .text-center>
+                        <h1>
+                            Login
+                    <div .row .justify-content-center .text-center>
+                        <form method=post action=@{LoginAdminR}>
+                            ^{widget}
+                            <input type="submit" value="Logar">
         |]
 
 postLoginAdminR :: Handler Html
